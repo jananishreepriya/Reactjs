@@ -1,0 +1,166 @@
+App.jsx
+import { useState } from "react";
+import "./App.css";
+
+function App() {
+  const questions = [
+    {
+      question: "What is the capital of France?",
+      options: ["Berlin", "Madrid", "Paris", "Rome"],
+      answer: "Paris",
+    },
+    {
+      question: "Which planet is known as the Red Planet?",
+      options: ["Earth", "Mars", "Jupiter", "Venus"],
+      answer: "Mars",
+    },
+    {
+      question: "Who wrote Romeo and Juliet?",
+      options: ["Shakespeare", "Dickens", "Austen", "Hemingway"],
+      answer: "Shakespeare",
+    },
+  ];
+
+  const [current, setCurrent] = useState(0);
+  const [score, setScore] = useState(0);
+  const [selected, setSelected] = useState(null);
+
+  const handleAnswer = (option) => {
+    setSelected(option);
+    if (option === questions[current].answer) {
+      setScore(score + 1);
+    }
+  };
+
+  const nextQuestion = () => {
+    setSelected(null);
+    setCurrent(current + 1);
+  };
+
+  return (
+    <div className="quiz-container">
+      <h1>Mini Quiz</h1>
+
+      {current < questions.length ? (
+        <>
+          <h2>{questions[current].question}</h2>
+
+          <div className="options">
+            {questions[current].options.map((option) => (
+              <button
+                key={option}
+                onClick={() => handleAnswer(option)}
+                disabled={selected !== null}
+                className={
+                  selected
+                    ? option === questions[current].answer
+                      ? "correct"
+                      : option === selected
+                      ? "wrong"
+                      : ""
+                    : ""
+                }
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+
+          <p className="score">Score: {score}</p>
+
+          {selected && (
+            <button className="next-btn" onClick={nextQuestion}>
+              Next
+            </button>
+          )}
+        </>
+      ) : (
+        <div className="result">
+          <h2>Quiz Completed 🎉</h2>
+          <p>Your Final Score: {score} / {questions.length}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;
+
+App.css
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f6f8;
+}
+
+.quiz-container {
+  max-width: 400px;
+  margin: 60px auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 18px;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+}
+
+.options button {
+  padding: 10px;
+  margin: 6px 0;
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  transition: 0.3s;
+}
+
+.options button:hover {
+  background: #eaeaea;
+}
+
+.correct {
+  background-color: #4caf50 !important;
+  color: white;
+}
+
+.wrong {
+  background-color: #f44336 !important;
+  color: white;
+}
+
+.score {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.next-btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.next-btn:hover {
+  background: #0056b3;
+}
+
+.result {
+  margin-top: 30px;
+}
